@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js -e js,hbs"
+    "dev": "nodemon ./src/app.js -e js,hbs",
+    "deploy": "git add --all && git commit -am \"Deploying on the Server\" && git push & git push heroku master"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "chalk": "^5.0.0",
     "express": "^4.17.2",
     "hbs": "^4.2.0",
     "mongodb": "^4.3.1"

@@ -2,7 +2,7 @@ const mongoDB = require('mongodb');
 const chalk = require('chalk');
 
 const MONGO_CLIENT = mongoDB.MongoClient;
-const connectionURL = 'mongodb://127.0.0.1:27017';
+const connectionURL = 'mongodb://localhost:27017';
 const database = 'task-manager';
 
 MONGO_CLIENT.connect(connectionURL, (error, client) => {

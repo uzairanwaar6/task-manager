@@ -7,7 +7,7 @@ const database = 'task-manager';
 
 MONGO_CLIENT.connect(connectionURL, (error, client) => {
     if (error)
-        return console.error(chalk.red.bold(`Could not connect to the Database\n${error}`));
+        return console.error(chalk.red.bold(`Somthing went wrong. Could not connect to the Database\n${error}`));
 
     console.log(chalk.bold.yellow(`Successfully connected to the Mongo DB Server...`));
 });

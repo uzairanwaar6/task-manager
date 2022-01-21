@@ -1,3 +1,4 @@
-//const create = require('./create');
-//const retrieve = require('./retrieve');
-//const update = require('./update');
+//const create = require('./practice/create');
+//const retrieve = require('./practice/retrieve');
+//const update = require('./practice/update');
+//const deleteFile = require('./practice/delete');

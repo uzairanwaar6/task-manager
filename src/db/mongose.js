@@ -1,5 +1,5 @@
 const mongose = require('mongoose');
-const { Task } = require('./taskModel');
+const { Task } = require('../models/taskModel');
 
 const connectionURL = 'mongodb://127.0.0.1:27017';
 const dbName = 'task-manager-api';

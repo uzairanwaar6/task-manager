@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js -e js,hbs",
-    "deploy": "git add --all && git commit -am \"Deploying on the Server\" && git push & git push heroku master"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js -e js,hbs",
+    "deploy": "git add --all && git commit -am \"Deploying on the Server\" && git push && git push heroku master",
+    "push":"git add --all && git commit -am \"Pushing changes into GitHub\" && git push"
   },
   "keywords": [],
   "author": "",

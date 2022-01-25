@@ -19,7 +19,7 @@ const model = {
         type: String,
         required: [true, 'username cannot be empty'],
         minLength: [3, 'username cannot be less than 3 characters'],
-        maxLength: [10, 'username cannot exceed 10 characters'],
+        maxLength: [20, 'username cannot exceed 20 characters'],
         validate: {
             validator(value) {
                 if (value.includes(' '))
@@ -35,10 +35,16 @@ const model = {
         minLength: [6, 'Password must contain at least 6 characters'],
         maxLength: [256, 'Password cannot be greater than 256 characters'],
         validate: {
-            validator(value) {
-                console.log(value, this.name);
-                if (value.toLowerCase().includes(this.name.toLowerCase()))
-                    throw new Error('Password cannot contain the same word you entered in name field');
+            validator(value, second) {
+                //     console.log(value);
+                //    // console.log(this)
+
+                //     if (value.toLowerCase().includes(this.firstName.toLowerCase()))
+                //         throw new Error('Password cannot contain the same word you entered in firstName field');
+
+                //     //     if (value.toLowerCase().includes(this.lastName.toLowerCase()))
+                //     //     throw new Error('Password cannot contain the same word you entered in lastName field');
+
                 if (value.toLowerCase().includes('password'))
                     throw new Error('Password cannot contain the word "Password"');
 
@@ -61,4 +67,5 @@ const model = {
 
 
 const User = mongoose.model('User', model);
+
 module.exports = User;

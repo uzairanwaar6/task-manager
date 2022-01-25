@@ -1,4 +1,4 @@
-const parseDBError = (error) => {
+const parseDBError = function (error) {
     return Object.values(error.errors).map(item => {
         delete item.properties.reason
         return {
@@ -7,3 +7,26 @@ const parseDBError = (error) => {
         };
     });
 };
+
+const getErrorObject = function (error, code) {
+    try {
+        return {
+            error: this.parseDBError(error),
+            code: code
+        };
+    }
+    catch (ex) {
+        return {
+            error: error,
+            code: code
+        };
+    }
+
+
+};
+
+
+module.exports = {
+    parseDBError,
+    getErrorObject
+}

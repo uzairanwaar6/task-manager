@@ -1,52 +1,59 @@
 const controller = require('../controllers/userController');
+const utils = require('../utils/utils');
 
-const routes = function (app) {
-    app.get('/users', (req, res) => {
-        controller.getAll()
-            .then((result) => res.send(result))
-            .catch((errorObject) => {
-                res.status(errorObject.code).send(errorObject.error);
-            });
+const routes = async function (app) {
+    app.get('/users', async (req, res) => {
+        try {
+            const result = await controller.getAll();
+            res.send(result);
+        } catch (error) {
+            res.status(error.code || 500).send(error.error);
+        }
     });
 
-    app.get('/users/:id', (req, res) => {
-        controller.getById(req.params.id)
-            .then((result) => res.send(result))
-            .catch((errorObject) => {
-                res.status(errorObject.code).send(errorObject.error);
-            });
+    app.get('/users/:id', async (req, res) => {
+        try {
+            const result = await controller.getById(req.params.id);
+            res.send(result);
+        } catch (error) {
+            utils.sendErrorResponse(error, res);
+        }
     });
 
-    app.post('/users', (req, res) => {
-        controller.add(req.body)
-            .then((result) => res.send(result))
-            .catch((errorObject) => {
-                res.status(errorObject.code).send(errorObject.error);
-            });
+    app.post('/users', async (req, res) => {
+        try {
+            const result = await controller.add(req.body);
+            res.send(result);
+        } catch (error) {
+            utils.sendErrorResponse(error, res);
+        }
     });
 
-    app.put('/users', (req, res) => {
-        controller.replace(req.body)
-            .then((result) => res.send(result))
-            .catch((errorObject) => {
-                res.status(errorObject.code).send(errorObject.error);
-            });
+    app.put('/users', async (req, res) => {
+        try {
+            const result = await controller.replace(req.body);
+            res.send(result);
+        } catch (error) {
+            utils.sendErrorResponse(error, res);
+        }
     });
 
-    app.patch('/users', (req, res) => {
-        controller.update(req.body)
-        .then((result) => res.send(result))
-        .catch((errorObject) => {
-            res.status(errorObject.code).send(errorObject.error);
-        });
+    app.patch('/users', async (req, res) => {
+        try {
+            const result = await controller.update(req.body);
+            res.send(result);
+        } catch (error) {
+            utils.sendErrorResponse(error, res);
+        }
     });
 
-    app.delete('/users/:id', (req, res) => {
-        controller.deleteById(req.params.id)
-            .then((result) => res.send(result))
-            .catch((errorObject) => {
-                res.status(errorObject.code).send(errorObject.error);
-            });
+    app.delete('/users/:id', async (req, res) => {
+        try {
+            const result = await controller.deleteById(req.params.id);
+            res.send(result);
+        } catch (error) {
+            utils.sendErrorResponse(error, res);
+        }
     });
 };
 

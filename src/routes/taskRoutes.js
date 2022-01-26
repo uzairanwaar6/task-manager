@@ -1,7 +1,7 @@
-const controller = require('../controllers/userController');
+const controller = require('../controllers/taskController');
 
 const routes = function (app) {
-    app.get('/users', (req, res) => {
+    app.get('/tasks', (req, res) => {
         controller.getAll()
             .then((result) => res.send(result))
             .catch((errorObject) => {
@@ -9,7 +9,7 @@ const routes = function (app) {
             });
     });
 
-    app.get('/users/:id', (req, res) => {
+    app.get('/tasks/:id', (req, res) => {
         controller.getById(req.params.id)
             .then((result) => res.send(result))
             .catch((errorObject) => {
@@ -17,7 +17,7 @@ const routes = function (app) {
             });
     });
 
-    app.post('/users', (req, res) => {
+    app.post('/tasks', (req, res) => {
         controller.add(req.body)
             .then((result) => res.send(result))
             .catch((errorObject) => {
@@ -25,7 +25,7 @@ const routes = function (app) {
             });
     });
 
-    app.put('/users', (req, res) => {
+    app.put('/tasks', (req, res) => {
         controller.replace(req.body)
             .then((result) => res.send(result))
             .catch((errorObject) => {
@@ -33,7 +33,7 @@ const routes = function (app) {
             });
     });
 
-    app.patch('/users', (req, res) => {
+    app.patch('/tasks', (req, res) => {
         controller.update(req.body)
         .then((result) => res.send(result))
         .catch((errorObject) => {
@@ -41,7 +41,7 @@ const routes = function (app) {
         });
     });
 
-    app.delete('/users/:id', (req, res) => {
+    app.delete('/tasks/:id', (req, res) => {
         controller.deleteById(req.params.id)
             .then((result) => res.send(result))
             .catch((errorObject) => {

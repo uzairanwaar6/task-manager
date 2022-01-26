@@ -1,6 +1,6 @@
 const db = require('../db/database');
 const utils = require('../utils/utils');
-const User = require('../models/userModel');
+const Task = require('../models/taskModel');
 
 db.connect();
 
@@ -8,21 +8,7 @@ db.connect();
 const getAll = function () {
     return new Promise((resolve, reject) => {
         try {
-            User.find({})
-                .then(result => resolve(result))
-                .catch(error => reject(utils.getErrorObject(error, 400)));
-        }
-        catch (error) {
-            reject(utils.getErrorObject(error, 500));
-        }
-    });    
-};
-
-
-const getById = function (id) {
-    return new Promise((resolve, reject) => {
-        try {
-            User.findById(id)
+            Task.find({})
                 .then(result => resolve(result))
                 .catch(error => reject(utils.getErrorObject(error, 400)));
         }
@@ -32,10 +18,24 @@ const getById = function (id) {
     });
 };
 
-const add = function (user) {
+
+const getById = function (id) {
     return new Promise((resolve, reject) => {
         try {
-            new User(user)
+            Task.findById(id)
+                .then(result => resolve(result))
+                .catch(error => reject(utils.getErrorObject(error, 400)));
+        }
+        catch (error) {
+            reject(utils.getErrorObject(error, 500));
+        }
+    });
+};
+
+const add = function (task) {
+    return new Promise((resolve, reject) => {
+        try {
+            new Task(task)
                 .save()
                 .then(result => resolve(result))
                 .catch(error => reject(utils.getErrorObject(error, 400)));
@@ -50,7 +50,7 @@ const add = function (user) {
 const replace = function (user) {
     return new Promise((resolve, reject) => {
         try {
-            User.findByIdAndUpdate({ "_id": user.id },
+            Task.findByIdAndUpdate({ "_id": user.id },
                 user,
                 {
                     "runValidators": true,
@@ -68,16 +68,16 @@ const replace = function (user) {
 const update = function (user) {
     return new Promise(async (resolve, reject) => {
         try {
-            let userModel = await User.findById(user.id);
+            let userModel = await Task.findById(user.id);
             userModel = { ...user };
 
-            User.findByIdAndUpdate({ "_id": user.id },
+            Task.findByIdAndUpdate({ "_id": user.id },
                 userModel,
                 {
                     "runValidators": true,
                     "new": true
                 })
-                .then(result =>  resolve(result))
+                .then(result => resolve(result))
                 .catch(error => reject(utils.getErrorObject(error, 400)));
         }
         catch (error) {
@@ -87,13 +87,10 @@ const update = function (user) {
     });
 };
 
-
-
-
 const deleteById = function (id) {
     return new Promise((resolve, reject) => {
         try {
-            User.findByIdAndDelete(id)
+            Task.findByIdAndDelete(id)
                 .then(result => resolve(result))
                 .catch(error => reject(utils.getErrorObject(error, 400)));
         }

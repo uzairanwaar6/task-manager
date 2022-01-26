@@ -5,37 +5,24 @@ const constants = require('../utils/constants');
 const model = {
     name: {
         type: String,
-        required: true
+        trim: true,
+        required: [true, 'You must enter task name'],
+        maxLength: [50, 'Name cannot be greaterh than 50 characters'],
+        minLength: [5, 'At least 5 charactes are required for the Task Name'],
     },
     description: {
         type: String,
         trim: true,
         maxLength: [1000, 'Description cannot be greaterh than 1000 characters'],
-        minLength: [50, 'At least 50 charactes are required in the Description'],
+        minLength: [10, 'At least 10 charactes are required in the Description'],
         required: [true, 'You must enter description to the task']
     },
     isCompleted: {
         type: Boolean,
         default: false,
-    },
-    createdOn: { type: Date },
-    createdBy: {
-        type: String,
-        required: [true, 'You must provide a valid email address'],
-        validate: {
-            message: constants.GENERIC_ERROR_MESSAGE,
-            validator(value) {
-                if (!npmValidator.isEmail(value))
-                    throw new Error(`Invalid email provided. ${value}`);
-            }
-        }
-    },
-    lastModifiedOn: { type: Date },
-    lastModifiedBy: { type: String },
+    }
 };
 
 const Task = mongoose.model('Task', model);
 
-module.exports = {
-    Task
-};
+module.exports =Task;

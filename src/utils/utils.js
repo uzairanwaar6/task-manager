@@ -28,9 +28,23 @@ const sendErrorResponse = function (error, response) {
     response.status(error.code).send(error.error);
 }
 
+const hash = async function (value) {
+    const bcrypt = require('bcrypt');
+
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hash(value, 8);
+}
+
+const compare = async function (value, hashedValue) {
+    const bcrypt = require('bcrypt');
+    return bcrypt.compare(value, hashedValue);
+}
+
 
 module.exports = {
     parseDBError,
     getErrorObject,
-    sendErrorResponse
+    sendErrorResponse,
+    hash,
+    compare
 }

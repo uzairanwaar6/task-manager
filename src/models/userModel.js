@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const npmValidator = require('validator');
 const constants = require('../utils/constants');
+const utils = require('../utils/utils');
 
-const model = {
+const model = new mongoose.Schema({
     firstName: {
         type: String,
         required: [true, 'firstName cannot be empty'],
@@ -63,8 +64,25 @@ const model = {
             }
         }
     }
+});
+
+const hashPassword = async function (model) {
+    if (model.isModified('password')) {
+        model.password = await utils.hash(model.password);
+    }
+  
 };
 
+model.pre('save', async function (next) {  
+    await hashPassword(this);
+    next();
+});
+
+//We cannot use it here because it is a query middlware
+// model.pre('findOneAndUpdate', async function (next) {
+//     await hashPassword(this);
+//     next();
+// });
 
 const User = mongoose.model('User', model);
 

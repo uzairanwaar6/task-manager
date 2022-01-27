@@ -35,7 +35,7 @@ router.put('/users', async (req, res) => {
     try {
         const result = await controller.replace(req.body);
         res.send(result);
-    } catch (error) {
+    } catch (error) {       
         utils.sendErrorResponse(error, res);
     }
 });
@@ -45,6 +45,7 @@ router.patch('/users', async (req, res) => {
         const result = await controller.update(req.body);
         res.send(result);
     } catch (error) {
+        console.log(error);
         utils.sendErrorResponse(error, res);
     }
 });

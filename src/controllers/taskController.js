@@ -26,9 +26,9 @@ const getById = async function (id) {
     }
 };
 
-const add = async function (user) {
+const add = async function (task) {
     try {
-        const model = await new Task(user).save();
+        const model = await new Task(task).save();
         return model;
     } catch (error) {
         error.code = 400;
@@ -36,33 +36,28 @@ const add = async function (user) {
     }
 };
 
-const replace = async function (user) {
+const replace = async function (task) {
     try {
-        const result = await Task.findByIdAndUpdate({ "_id": user.id },
-            user,
-            {
-                "runValidators": true,
-                "new": true
-            });
-        return result;
+        let model = await Task.findById(task.id);
+        model = new Task({ ...model, ...task });
+        await model.save();
+
+        return model;
     } catch (error) {
         error.code = 400;
         throw error;
     }
 };
 
-const update = async function (user) {
+const update = async function (task) {
     try {
-        let userModel = await Task.findById(user.id);
-        userModel = { ...user };
+        let model = await Task.findById(task.id);
+        Object.keys(task).forEach(item => {
+            model[item] = task[item];
+        });
 
-        const result = await Task.findByIdAndUpdate({ "_id": user.id },
-            userModel,
-            {
-                "runValidators": true,
-                "new": true
-            });
-        return result;
+        await model.save();
+        return model;
     } catch (error) {
         error.code = 400;
         throw error;

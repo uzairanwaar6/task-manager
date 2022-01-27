@@ -38,13 +38,11 @@ const add = async function (user) {
 
 const replace = async function (user) {
     try {
-        const result = await User.findByIdAndUpdate({ "_id": user.id },
-            user,
-            {
-                "runValidators": true,
-                "new": true
-            });
-        return result;
+        let userModel = await User.findById(user.id);
+        user = new User({ ...userModel, ...user });
+        await user.save();
+
+        return user;
     } catch (error) {
         error.code = 400;
         throw error;
@@ -54,15 +52,12 @@ const replace = async function (user) {
 const update = async function (user) {
     try {
         let userModel = await User.findById(user.id);
-        userModel = { ...user };
+        Object.keys(user).forEach(item => {
+            userModel[item] = user[item];
+        });
 
-        const result = await User.findByIdAndUpdate({ "_id": user.id },
-            userModel,
-            {
-                "runValidators": true,
-                "new": true
-            });
-        return result;
+        await userModel.save();
+        return userModel;
     } catch (error) {
         error.code = 400;
         throw error;

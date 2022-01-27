@@ -7,7 +7,7 @@
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js -e js,hbs",
     "deploy": "git add --all && git commit -am \"Deploying on the Server\" && git push && git push heroku master",
-    "push":"git add --all && git commit -am \"Pushing changes into GitHub\" && git push"
+    "push": "git add --all && git commit -am \"Pushing changes into GitHub\" && git push"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "chalk": "^2.4.1",
     "express": "^4.17.2",
     "hbs": "^4.2.0",

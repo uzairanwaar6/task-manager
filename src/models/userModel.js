@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const npmValidator = require('validator');
 const constants = require('../utils/constants');
 const utils = require('../utils/app_utils');
-const jsonwebtoken = require('jsonwebtoken');
 
 const schema = new mongoose.Schema({
     firstName: {
@@ -90,13 +89,8 @@ schema.methods.createToken = async function () {
         username: this.username
     };
     delete payload.password;
-    const options = {
-        algorithm: 'HS512',
-        expiresIn: 60 * 15//15 Minutes
-    }
-    //Create a Hashed key to provide as Secret
-    const token = await jsonwebtoken.sign(payload, 'abc123', options);
-    this.token = token;
+
+    this.token = utils.createJWT(payload);
     this.tokens.push({ token });
     this.save();
     return token;

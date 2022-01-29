@@ -9,6 +9,7 @@ const start = (app, port) => {
 
     app.listen(finalPort, () => {
         const chalk = require('chalk');
+        
         console.log(chalk.underline.yellow(`Server is started on port ${finalPort}`));
     });
 };

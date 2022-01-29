@@ -1,3 +1,6 @@
+const constants = require('./constants');
+const jwt = require('jsonwebtoken');
+
 const parseDBError = function (error) {
     return Object.values(error.errors).map(item => {
         delete item.properties.reason
@@ -57,6 +60,21 @@ const createError = async function (message, code, throwError) {
     return error;
 };
 
+const createJWT = async function (payload) {
+    const options = {
+        algorithm: constants.JWT_ALGORITHM,
+        expiresIn: 60 * 15//15 Minutes
+    }
+    //Create a Hashed key to provide as Secret
+    const token = await jwt.sign(payload, constants.JWT_SECRET_KEY, options);
+    return token;
+};
+
+const verifyJWT = async function (token) {
+    const payload = jwt.verify(token, constants.JWT_SECRET_KEY);
+    return payload;
+};
+
 
 module.exports = {
     parseDBError,
@@ -66,5 +84,7 @@ module.exports = {
     compare,
     create404,
     create400,
-    createError
+    createError,
+    createJWT,
+    verifyJWT
 }

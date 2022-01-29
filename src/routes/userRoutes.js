@@ -7,7 +7,7 @@ const router = new express.Router();
 router.post('/users/register', async (req, res) => {
     try {
         const result = await controller.register(req.body);
-        res.send(result);
+        res.status(201).send(result);
     } catch (error) {
         utils.sendErrorResponse(error, res);
     }
@@ -43,7 +43,7 @@ router.get('/users/:id', async (req, res) => {
 router.post('/users', async (req, res) => {
     try {
         const result = await controller.add(req.body);
-        res.send(result);
+        res.status(201).send(result);
     } catch (error) {
         utils.sendErrorResponse(error, res);
     }

@@ -1,9 +1,48 @@
 const db = require('../db/database');
-const utils = require('../utils/utils');
+const utils = require('../utils/app_utils');
 const User = require('../models/userModel');
 
 db.connect();
 
+const register = async function (user) {
+    try {
+        const newUser = await this.add(user);
+
+        const loggedIn = await this.login({
+            username: user.username,
+            password: user.password
+        });
+        return loggedIn;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const login = async function (user) {
+    try {
+        const keys = Object.keys(user);
+        const isValid = ['username', 'password'].every((key) => keys.includes(key));
+
+        if (!isValid)
+            await utils.create400('Invalid Request', true);
+        
+        const result = await User.findOne({
+            username: user.username
+        });
+
+        if (!result) {
+            await utils.create404('User not found', true);
+        }
+        const verified = await User.verifyPassword(user.password, result.password);
+        if (!verified)
+            await utils.create400('Invalid Credentials', true);
+
+        await result.createToken();
+        return { result, token: result.token };
+    } catch (error) {
+        throw error;
+    }
+};
 
 const getAll = async function () {
     try {
@@ -80,5 +119,7 @@ module.exports = {
     getAll,
     replace,
     update,
-    deleteById
+    deleteById,
+    login,
+    register
 };

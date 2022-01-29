@@ -5,12 +5,11 @@ const connectionString = `${connectionURL}/${dbName}`;
 
 
 
-const connect = function() {
+const connect = function () {
     const mongose = require('mongoose');
-    
+
     mongose.connect(connectionString, {
-        useNewUrlParser: true,
-        // useCreateIndex: true
+        autoIndex: true
     });
 };
 

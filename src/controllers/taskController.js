@@ -1,5 +1,5 @@
 const db = require('../db/database');
-const utils = require('../utils/utils');
+const utils = require('../utils/app_utils');
 const Task = require('../models/taskModel');
 
 db.connect();

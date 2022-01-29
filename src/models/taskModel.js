@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const npmValidator = require('validator');
 const constants = require('../utils/constants');
 
-const model = new mongoose.Schema({
+const schema = new mongoose.Schema({
     name: {
         type: String,
         trim: true,
@@ -23,11 +23,11 @@ const model = new mongoose.Schema({
     }
 });
 
-model.pre('save', async function (next) {  
+schema.pre('save', async function (next) {  
     console.log('save middleware for tasks');
     next();
 });
 
-const Task = mongoose.model('Task', model);
+const Task = mongoose.model('Task', schema);
 
 module.exports = Task;

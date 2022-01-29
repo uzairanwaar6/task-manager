@@ -12,33 +12,50 @@ const getErrorObject = function (error) {
     try {
         return {
             error: this.parseDBError(error),
-            code: error.code || 400
+            code: error.statusCode || 400
         };
     }
     catch (ex) {
         return {
             error: error,
-            code: error.code || 500
+            code: error.statusCode || 500
         };
     }
 };
 
 const sendErrorResponse = function (error, response) {
     error = this.getErrorObject(error);
-    response.status(error.code).send(error.error);
-}
+    response.status(error.code).send(error.error.message);
+};
 
 const hash = async function (value) {
     const bcrypt = require('bcrypt');
 
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hash(value, 8);
-}
+};
 
 const compare = async function (value, hashedValue) {
     const bcrypt = require('bcrypt');
     return bcrypt.compare(value, hashedValue);
-}
+};
+
+const create404 = async function (message, throwError = false) {
+    await this.createError(message, 404, throwError);
+};
+
+const create400 = async function (message, throwError = false) {
+    await this.createError(message, 400, throwError);
+};
+
+const createError = async function (message, code, throwError) {
+    const error = new Error(message);
+    error.statusCode = code || 500;
+    if (throwError)
+        throw error;
+
+    return error;
+};
 
 
 module.exports = {
@@ -46,5 +63,8 @@ module.exports = {
     getErrorObject,
     sendErrorResponse,
     hash,
-    compare
+    compare,
+    create404,
+    create400,
+    createError
 }

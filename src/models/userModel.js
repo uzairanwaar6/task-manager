@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const npmValidator = require('validator');
 const constants = require('../utils/constants');
-const utils = require('../utils/utils');
+const utils = require('../utils/app_utils');
+const jsonwebtoken = require('jsonwebtoken');
 
-const model = new mongoose.Schema({
+const schema = new mongoose.Schema({
     firstName: {
         type: String,
         required: [true, 'firstName cannot be empty'],
@@ -18,6 +19,7 @@ const model = new mongoose.Schema({
     },
     username: {
         type: String,
+        unique: true,
         required: [true, 'username cannot be empty'],
         minLength: [3, 'username cannot be less than 3 characters'],
         maxLength: [20, 'username cannot exceed 20 characters'],
@@ -55,6 +57,7 @@ const model = new mongoose.Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: [true, 'You must provide a valid email address'],
         validate: {
             message: constants.GENERIC_ERROR_MESSAGE,
@@ -63,20 +66,54 @@ const model = new mongoose.Schema({
                     throw new Error(`Invalid email provided. ${value}`);
             }
         }
-    }
+    },
+    tokens: [
+        {
+            token: {
+                type: String
+            }
+        }
+    ]
 });
 
-const hashPassword = async function (model) {
+schema.pre('save', async function (next) {
+    await User.hashPassword(this);
+    next();
+});
+
+schema.methods.createToken = async function () {
+    const payload = {
+        id: this._id,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        username: this.username
+    };
+    delete payload.password;
+    const options = {
+        algorithm: 'HS512',
+        expiresIn: 60 * 15//15 Minutes
+    }
+    //Create a Hashed key to provide as Secret
+    const token = await jsonwebtoken.sign(payload, 'abc123', options);
+    this.token = token;
+    this.tokens.push({ token });
+    this.save();
+    return token;
+};
+
+schema.statics.hashPassword = async (model) => {
     if (model.isModified('password')) {
         model.password = await utils.hash(model.password);
     }
-  
 };
 
-model.pre('save', async function (next) {  
-    await hashPassword(this);
-    next();
-});
+schema.statics.verifyPassword = async (password, hashedPassword) => {
+    const isValid = await utils.compare(password, hashedPassword);
+    return isValid;
+};
+
+
 
 //We cannot use it here because it is a query middlware
 // model.pre('findOneAndUpdate', async function (next) {
@@ -84,6 +121,6 @@ model.pre('save', async function (next) {
 //     next();
 // });
 
-const User = mongoose.model('User', model);
+const User = mongoose.model('User', schema);
 
 module.exports = User;

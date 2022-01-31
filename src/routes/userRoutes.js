@@ -1,6 +1,7 @@
 const controller = require('../controllers/userController');
 const utils = require('../utils/app_utils');
 const express = require('express');
+const auth = require('../middlewares/auth');
 
 const router = new express.Router();
 
@@ -22,7 +23,7 @@ router.post('/users/login', async (req, res) => {
     }
 });
 
-router.get('/users', async (req, res) => {
+router.get('/users', auth, async (req, res) => {
     try {
         const result = await controller.getAll();
         res.send(result);
@@ -31,16 +32,16 @@ router.get('/users', async (req, res) => {
     }
 });
 
-router.get('/users/:id', async (req, res) => {
+router.get('/users/me', auth, async (req, res) => {
     try {
-        const result = await controller.getById(req.params.id);
+        const result = await controller.getById(req.user.id);
         res.send(result);
     } catch (error) {
         utils.sendErrorResponse(error, res);
     }
 });
 
-router.post('/users', async (req, res) => {
+router.post('/users', auth, async (req, res) => {
     try {
         const result = await controller.add(req.body);
         res.status(201).send(result);
@@ -49,7 +50,7 @@ router.post('/users', async (req, res) => {
     }
 });
 
-router.put('/users', async (req, res) => {
+router.put('/users', auth, async (req, res) => {
     try {
         const result = await controller.replace(req.body);
         res.send(result);
@@ -58,7 +59,7 @@ router.put('/users', async (req, res) => {
     }
 });
 
-router.patch('/users', async (req, res) => {
+router.patch('/users', auth, async (req, res) => {
     try {
         const result = await controller.update(req.body);
         res.send(result);
@@ -68,9 +69,9 @@ router.patch('/users', async (req, res) => {
     }
 });
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users', auth, async (req, res) => {
     try {
-        const result = await controller.deleteById(req.params.id);
+        const result = await controller.deleteById(req.user.id);
         res.send(result);
     } catch (error) {
         utils.sendErrorResponse(error, res);

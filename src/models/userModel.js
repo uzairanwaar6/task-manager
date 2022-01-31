@@ -90,7 +90,7 @@ schema.methods.createToken = async function () {
     };
     delete payload.password;
 
-    this.token = utils.createJWT(payload);
+    const token = await utils.createJWT(payload);
     this.tokens.push({ token });
     this.save();
     return token;

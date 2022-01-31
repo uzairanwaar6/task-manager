@@ -6,7 +6,7 @@ db.connect();
 
 const register = async function (user) {
     try {
-        const newUser = await this.add(user);
+        await this.add(user);
 
         const loggedIn = await this.login({
             username: user.username,
@@ -25,7 +25,7 @@ const login = async function (user) {
 
         if (!isValid)
             await utils.create400('Invalid Request', true);
-        
+
         const result = await User.findOne({
             username: user.username
         });
@@ -37,8 +37,8 @@ const login = async function (user) {
         if (!verified)
             await utils.create400('Invalid Credentials', true);
 
-        await result.createToken();
-        return { result, token: result.token };
+        const token = await result.createToken();
+        return { result, token };
     } catch (error) {
         throw error;
     }

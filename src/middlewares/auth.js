@@ -6,6 +6,7 @@ module.exports = async (req, res, next) => {
         const token = req.header('Authorization').replace('Bearer ', '');
         const user = await utils.verifyJWT(token);
         req.user = await User.findById(user.id);
+        req.user.id = user.id;
         next();
     } catch (error) {
         res.status(401).send('Unauthorized');

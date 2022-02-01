@@ -88,12 +88,18 @@ schema.methods.createToken = async function () {
         email: this.email,
         username: this.username
     };
-    delete payload.password;
 
     const token = await utils.createJWT(payload);
     this.tokens.push({ token });
     this.save();
     return token;
+};
+
+schema.methods.toJSON = function () {
+    const user = this.toObject();//This is required becuase whenever object is converted into Json this will be called
+    delete user.password;
+    delete user.tokens;
+    return user;
 };
 
 schema.statics.hashPassword = async (model) => {

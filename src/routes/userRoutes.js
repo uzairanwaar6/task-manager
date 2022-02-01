@@ -23,6 +23,25 @@ router.post('/users/login', async (req, res) => {
     }
 });
 
+router.get('/users/logout', auth, async (req, res) => {
+    try {
+        const result = await controller.logout(req.user);
+        res.send(result);
+    } catch (error) {
+        utils.sendErrorResponse(error, res);
+    }
+});
+
+router.get('/users/logout-all', auth, async (req, res) => {
+    try {
+        const result = await controller.logoutAll(req.user);
+        res.send(result);
+    } catch (error) {
+        utils.sendErrorResponse(error, res);
+    }
+});
+
+
 router.get('/users', auth, async (req, res) => {
     try {
         const result = await controller.getAll();

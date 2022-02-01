@@ -44,6 +44,28 @@ const login = async function (user) {
     }
 };
 
+const logout = async function (user) {
+    try {
+        user.tokens = user.tokens.filter((item) => item.token !== user.token);
+        user.save();
+        return true;
+    } catch (error) {
+        error.code = 400;
+        throw error;
+    }
+};
+
+const logoutAll = async function (user) {
+    try {
+        user.tokens = [];
+        user.save();
+        return true;
+    } catch (error) {
+        error.code = 400;
+        throw error;
+    }
+};
+
 const getAll = async function () {
     try {
         const result = await User.find({});
@@ -121,5 +143,7 @@ module.exports = {
     update,
     deleteById,
     login,
+    logout,
+    logoutAll,
     register
 };

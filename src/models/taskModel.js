@@ -21,9 +21,10 @@ const schema = new mongoose.Schema({
         type: Boolean,
         default: false,
     }
-});
+},
+    { timestamps: true });
 
-schema.pre('save', async function (next) {  
+schema.pre('save', async function (next) {
     console.log('save middleware for tasks');
     next();
 });

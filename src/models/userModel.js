@@ -73,7 +73,8 @@ const schema = new mongoose.Schema({
             }
         }
     ]
-});
+},
+    { timestamps: true });
 
 schema.pre('save', async function (next) {
     await User.hashPassword(this);

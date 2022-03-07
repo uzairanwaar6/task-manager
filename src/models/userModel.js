@@ -97,7 +97,7 @@ schema.methods.createToken = async function () {
 };
 
 schema.methods.toJSON = function () {
-    const user = this.toObject();//This is required becuase whenever object is converted into Json this will be called
+    const user = this.toObject();//This is required because whenever object is converted into Json this will be called
     delete user.password;
     delete user.tokens;
     return user;

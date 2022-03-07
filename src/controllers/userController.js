@@ -1,6 +1,7 @@
 const db = require('../db/database');
 const utils = require('../utils/app_utils');
 const User = require('../models/userModel');
+const NotFoundError = require('../errors/404');
 
 db.connect();
 
@@ -113,6 +114,10 @@ const replace = async function (user) {
 const update = async function (user) {
     try {
         let userModel = await User.findById(user.id);
+        if (!userModel) {
+            throw new NotFoundError('User not found');
+        }
+
         Object.keys(user).forEach(item => {
             userModel[item] = user[item];
         });
@@ -120,7 +125,9 @@ const update = async function (user) {
         await userModel.save();
         return userModel;
     } catch (error) {
-        error.code = 400;
+        if (!error.statusCode)
+            error.statusCode = 400;
+
         throw error;
     }
 };

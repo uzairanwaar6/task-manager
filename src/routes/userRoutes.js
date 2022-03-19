@@ -1,7 +1,9 @@
 const controller = require('../controllers/userController');
 const utils = require('../utils/app_utils');
+const multerConfig = require('../utils/multer-config');
 const express = require('express');
 const auth = require('../middlewares/auth');
+const multer = require('multer');
 
 const router = new express.Router();
 
@@ -90,6 +92,16 @@ router.patch('/users', auth, async (req, res) => {
 
 router.delete('/users', auth, async (req, res) => {
     try {
+        const result = await controller.deleteById(req.user.id);
+        res.send(result);
+    } catch (error) {
+        utils.sendErrorResponse(error, res);
+    }
+});
+
+router.post('/users/me/avatar', multerConfig.userAvatar('avatar'), async (req, res) => {
+    try {
+        return res.send();
         const result = await controller.deleteById(req.user.id);
         res.send(result);
     } catch (error) {

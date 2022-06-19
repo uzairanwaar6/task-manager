@@ -102,11 +102,11 @@ router.delete('/users', auth, async (req, res) => {
 router.post('/users/me/avatar', multerConfig.userAvatar('avatar'), async (req, res) => {
     try {
         return res.send();
-        const result = await controller.deleteById(req.user.id);
-        res.send(result);
     } catch (error) {
         utils.sendErrorResponse(error, res);
     }
+}, (error, req, res, next) => {
+    utils.sendErrorResponse(error, res);
 });
 
 module.exports = router;
